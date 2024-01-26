@@ -21,7 +21,6 @@ const routes = [
       title: 'Cocktail page'
     },
     beforeEnter: (to: any, from: any, next: any) => {
-      console.log(to.params.cocktail)
       const cocktail = to.params.cocktail
       if (isValidCocktail(cocktail)) {
         next()
