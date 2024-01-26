@@ -12,6 +12,7 @@ import Nav from './components/layout/Nav.vue'
   </main>
 </template>
 
-<style scoped>
-/* GLOBAL STYLES */
+<style lang="scss">
+@import '@/assets/reset.scss';
+@import '@/assets/main.scss';
 </style>
