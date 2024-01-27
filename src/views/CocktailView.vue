@@ -3,7 +3,7 @@ import Card from '@/components/cocktail/Card.vue'
 import { useFetch } from '@/composables/useFetch'
 import { useCocktails } from '@/stores/cocktails'
 import type { Cocktail } from '@/types/cocktail.type'
-import { computed, onMounted, watch, watchEffect } from 'vue'
+import { computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 const cocktailStore = useCocktails()
@@ -13,7 +13,7 @@ const url = computed(() => useRoute().fullPath.split('/')[2])
 const fetchData = () => {
   console.log('CHANGE')
 
-  if (!cocktailStore.cocktails.includes(url.value)) {
+  if (!cocktailStore.cocktails.find((c: Cocktail) => c.url === url.value)) {
     // RETRIEVE DATA FROM API
     const { onDataLoaded } = useFetch(url.value) as any
 
@@ -31,15 +31,13 @@ const fetchData = () => {
         console.log(cocktail)
         console.log(cocktailStore.cocktails)
 
-        if (cocktailStore.cocktails.filter((c: Cocktail) => c.url === cocktail.url))
-          cocktailStore.addCocktail(cocktail)
+        cocktailStore.addCocktail(cocktail)
       }
     })
   }
 }
 
-onMounted(() => fetchData)
-watchEffect(() => fetchData)
+onMounted(() => fetchData())
 </script>
 <template>
   <section>

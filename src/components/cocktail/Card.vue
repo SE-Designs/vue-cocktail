@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useCocktails } from '@/stores/cocktails'
 import type { Cocktail } from '@/types/cocktail.type'
+import { computed, nextTick, onMounted, ref } from 'vue'
 
 const cocktailStore = useCocktails()
 
@@ -11,9 +12,9 @@ const props = defineProps({
   }
 })
 
-const cocktail = cocktailStore.cocktails.filter(
-  (cocktail: Cocktail) => cocktail.url === props.url
-)[0] as Cocktail
+const cocktail = computed(
+  () => cocktailStore.getCocktails.filter((cocktail: Cocktail) => cocktail.url === props.url)[0]
+)
 </script>
 <template>
   <div class="card__content" v-if="cocktail">

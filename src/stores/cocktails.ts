@@ -6,10 +6,12 @@ import { defineStore } from 'pinia'
 export const useCocktails = defineStore('cocktails', () => {
   const cocktails = ref([]) as any
 
+  const getCocktails = computed(() => cocktails.value)
+
   function addCocktail(cocktail: Cocktail) {
     // CACHE COCKTAIL IN STORE
     cocktails.value.push(cocktail)
   }
 
-  return { cocktails, addCocktail }
+  return { cocktails, getCocktails, addCocktail }
 })
