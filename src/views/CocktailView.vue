@@ -8,25 +8,31 @@ import { useRoute } from 'vue-router'
 
 const cocktailStore = useCocktails()
 
-const url = computed(() => useRoute().fullPath.split('/')[2])
+const route = useRoute()
+const url = computed(() => route.fullPath.split('/')[2])
 
-const fetchData = () => {
+watch(
+  () => route.fullPath,
+  async () => await fetchData()
+)
+
+const fetchData = async () => {
   console.log('CHANGE')
 
   if (!cocktailStore.cocktails.find((c: Cocktail) => c.url === url.value)) {
     // RETRIEVE DATA FROM API
     const { onDataLoaded } = useFetch(url.value) as any
 
-    onDataLoaded((loadedData: any) => {
-      console.log('Data loaded:', loadedData)
-      if (loadedData && loadedData.drinks && loadedData.drinks.length > 0) {
+    onDataLoaded((json: any) => {
+      console.log('Data loaded:', json)
+      if (json && json.drinks && json.drinks.length > 0) {
         const cocktail = {
           url: url.value,
-          name: loadedData.drinks[0].strDrink,
-          category: loadedData.drinks[0].strCategory,
-          alcoholic: loadedData.drinks[0].strAlcoholic,
-          glass: loadedData.drinks[0].strGlass,
-          image_url: loadedData.drinks[0].strDrinkThumb
+          name: json.drinks[0].strDrink,
+          category: json.drinks[0].strCategory,
+          alcoholic: json.drinks[0].strAlcoholic,
+          glass: json.drinks[0].strGlass,
+          image_url: json.drinks[0].strDrinkThumb
         }
         console.log(cocktail)
         console.log(cocktailStore.cocktails)
@@ -37,12 +43,12 @@ const fetchData = () => {
   }
 }
 
-onMounted(() => fetchData())
+onMounted(async () => await fetchData())
 </script>
 <template>
   <section>
     <h1>Cocktail View - {{ url }}</h1>
-    <Card :url="url" />
+    <Card />
   </section>
 </template>
 <style scoped lang="scss"></style>

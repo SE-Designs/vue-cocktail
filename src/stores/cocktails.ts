@@ -4,7 +4,7 @@ import type { Cocktail } from '@/types/cocktail.type'
 import { defineStore } from 'pinia'
 
 export const useCocktails = defineStore('cocktails', () => {
-  const cocktails = ref([]) as any
+  const cocktails: Ref<Cocktail[]> = ref([])
 
   const getCocktails = computed(() => cocktails.value)
 

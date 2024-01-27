@@ -1,19 +1,17 @@
 <script setup lang="ts">
 import { useCocktails } from '@/stores/cocktails'
 import type { Cocktail } from '@/types/cocktail.type'
-import { computed, nextTick, onMounted, ref } from 'vue'
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 
 const cocktailStore = useCocktails()
 
-const props = defineProps({
-  url: {
-    type: String,
-    requied: true
-  }
-})
+const route = useRoute()
+
+const url = computed(() => route.fullPath.split('/')[2])
 
 const cocktail = computed(
-  () => cocktailStore.getCocktails.filter((cocktail: Cocktail) => cocktail.url === props.url)[0]
+  () => cocktailStore.getCocktails.filter((cocktail: Cocktail) => cocktail.url === url.value)[0]
 )
 </script>
 <template>
@@ -30,4 +28,9 @@ const cocktail = computed(
     <img :src="cocktail?.image_url" :alt="cocktail?.name" class="card__image-item" loading="lazy" />
   </div>
 </template>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.card__image {
+  max-width: 360px;
+  max-height: 360px;
+}
+</style>
